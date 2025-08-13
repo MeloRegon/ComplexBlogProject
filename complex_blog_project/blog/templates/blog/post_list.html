@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %}Posts — ComplexBlog{% endblock %}
+
+{% block content %}
+  <h1 style="margin:0 0 8px;">All Posts</h1>
+
+  <!-- Search -->
+  <form method="get" action="" class="searchbar">
+    <input type="text" name="q" value="{{ current_query }}" placeholder="Search by title, text or tag">
+    <button class="btn btn-primary" type="submit">Search</button>
+  </form>
+
+  {% if user.is_authenticated %}
+    <p><a class="btn btn-primary" href="{% url 'create_post' %}">Create a new Post</a></p>
+  {% endif %}
+
+  <div id="posts-container" class="timeline">
+    {% for post in posts %}
+      {% include 'blog/_post_card.html' %}
+    {% empty %}
+      <div class="post-card">No posts found.</div>
+    {% endfor %}
+  </div>
+
+  <div id="sentinel"></div>
+{% endblock %}
+
+{% block extra_js %}
+  <script>
+    // keep your Infinite Scroll JS here (unchanged)
+    const currentQuery = "{{ current_query|default:'' }}";
+    let loading = false;
+    let hasNext = {% if page_obj.has_next %}true{% else %}false{% endif %};
+    let nextPage = {% if page_obj.has_next %}{{ page_obj.next_page_number }}{% else %}2{% endif %};
+    let lastLoadedPage = 1;
+
+    async function loadNextPage() {
+      if (loading || !hasNext) return;
+      loading = true;
+      try {
+        const url = '/posts/fragment/?page=' + nextPage + (currentQuery ? '&q=' + encodeURIComponent(currentQuery) : '');
+        const resp = await fetch(url);
+        const data = await resp.json();
+
+        if (data.current_page === lastLoadedPage) { hasNext = false; observer.disconnect(); return; }
+        if (!data.html || !data.html.trim())      { hasNext = false; observer.disconnect(); return; }
+
+        document.getElementById('posts-container').insertAdjacentHTML('beforeend', data.html);
+
+        lastLoadedPage = data.current_page;
+        hasNext = data.has_next;
+        nextPage = data.next_page ? data.next_page : lastLoadedPage + 1;
+        if (!hasNext) observer.disconnect();
+      } catch (e) { console.error(e); }
+      finally { loading = false; }
+    }
+
+    const sentinel = document.getElementById('sentinel');
+    const observer = new IntersectionObserver((entries)=>{ if (entries[0].isIntersecting) loadNextPage(); }, { rootMargin: '200px' });
+    observer.observe(sentinel);
+  </script>
+{% endblock %}

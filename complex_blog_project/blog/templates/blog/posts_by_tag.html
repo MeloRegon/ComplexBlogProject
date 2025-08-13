@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}#{{ tag.name }} — Posts{% endblock %}
+
+{% block content %}
+  <h1 style="margin:0 0 8px;">#{{ tag.name }}</h1>
+  <div class="timeline">
+    {% for post in posts %}
+      {% include 'blog/_post_card.html' %}
+    {% empty %}
+      <div class="post-card">No posts with this tag yet.</div>
+    {% endfor %}
+  </div>
+{% endblock %}

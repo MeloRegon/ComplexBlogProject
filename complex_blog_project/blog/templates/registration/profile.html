@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}Profile — ComplexBlog{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+  <div class="profile-header">
+    <div class="profile-info">
+      <h2>@{{ user.username }}</h2>
+      <p class="join-date">Joined: {{ user.date_joined|date:"M d, Y" }}</p>
+    </div>
+
+    <div class="profile-actions">
+      <a class="btn" href="{% url 'post_list' %}">All posts</a>
+      <a class="btn btn-primary" href="{% url 'create_post' %}">Create</a>
+    </div>
+  </div>
+
+  <h3 style="margin: 6px 0 10px;">Your recent posts</h3>
+
+  <div class="timeline">
+    {% for post in posts|slice:":10" %}
+      {% include 'blog/_post_card.html' %}
+    {% empty %}
+      <div class="post-card">You haven't created any posts yet.</div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}
