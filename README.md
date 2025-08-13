@@ -7,24 +7,24 @@ Features: posts with optional images, tags, search, infinite scroll, auth, profi
 
 ## 📸 Screenshots
 
-- **Home / Timeline**
-  ![Home / Timeline](complex_blog_project/media/docs/timeline.png)
-  ![Home / Timeline](complex_blog_project/media/docs/timeline2.png)
+### Home / Timeline
+![Home / Timeline](complex_blog_project/media/docs/timeline.png)
+![Home / Timeline](complex_blog_project/media/docs/timeline2.png)
 
   
-- **Post detail**  
+### Post detail
   ![Post detail](complex_blog_project/media/docs/post_detail.png)
 
 
-- **Create post**  
+### Create post
   ![Create post](complex_blog_project/media/docs/create_post.png)
 
 
-- **Posts by tag**
+### Posts by tag
   ![Posts by tag](complex_blog_project/media/docs/tag.png)
 
 
-- **Profile**
+### Profile
   ![Profile](complex_blog_project/media/docs/profile.png)
 
 ---
